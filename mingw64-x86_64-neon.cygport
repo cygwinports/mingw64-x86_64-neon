@@ -1,0 +1,27 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross
+
+NAME="mingw64-x86_64-neon"
+VERSION=0.30.0
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="HTTP and WebDAV library for Win64 toolchain"
+DESCRIPTION="neon is an HTTP and WebDAV client library, with a C language API."
+HOMEPAGE="http://www.webdav.org/neon/"
+SRC_URI="http://www.webdav.org/neon/neon-${VERSION}.tar.gz"
+SRC_DIR="neon-${VERSION}"
+
+# for some reason, autotools doesn't pick this up
+ACLOCAL_FLAGS="-I macros"
+CPPFLAGS+=" -posix -DWIN32_LEAN_AND_MEAN"
+CYGCONF_ARGS="
+	--with-expat
+	--with-ssl=openssl
+	ne_cv_os_uname=MINGW64
+"
+
+src_install() {
+	cd ${B}
+	touch install-{docs,man,html}
+	cyginstall
+}
